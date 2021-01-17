@@ -9,7 +9,9 @@ const express = require('express'),
     mongoose = require('mongoose'),
     Models = require('./models.js'),
     Users = Models.User,
-    Movies = Models.Movie;
+    Movies = Models.Movie,
+    config = require('./config');
+    
 
 const app = express();
 const { check, validationResult } = require('express-validator');
@@ -65,7 +67,6 @@ app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req
 });
 
 //get data about genre by title "thriller"
-// should it be as is or just 
 app.get('/movies/genres/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
 // This is how it is searched by - by name of GENRE, not name of MOVIE
     Movies.findOne({ 'Genre.Name': req.params.Name })
