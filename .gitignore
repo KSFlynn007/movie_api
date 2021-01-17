@@ -1,5 +1,4 @@
 node_modules
-# added log.txt as while working/testing the project, I ended up adding lots of entries to log by opening up localhost:8080
 log
 .env
 
