@@ -1,6 +1,6 @@
 //endpoint logic for existing users to login
 
-const jwtSecret = 'your_jwt_secret'; //This has to be the same key in passport.js JWTStrategy
+const jwtSecret = process.env.JWT_SECRET; //This has to be the same key in passport.js JWTStrategy
 
 const jwt = require('jsonwebtoken'),
     passport = require('passport');

@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express'),
     morgan = require('morgan'),
     //cross origin resource sharing - enables other work to reference this backend, including my API
@@ -23,10 +25,10 @@ const passport = require('passport');
 require('./passport'); //why is this format different, has an error?
 
 //connects to existing MongoDB database LOCAL
-// mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(process.env.LOCAL_DB, { useNewUrlParser: true, useUnifiedTopology: true});
 
 // connects to MongoDB Atlas database
-mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true});
+// mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true});
 
 //GET route located at default endpoint / that returns text
 app.get('/', (req, res) => {
