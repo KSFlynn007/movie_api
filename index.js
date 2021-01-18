@@ -33,6 +33,7 @@ require('dotenv').config();
 
 const express = require('express'),
     morgan = require('morgan'),
+    uuid = require('uuid'),
     cors = require('cors'),
     mongoose = require('mongoose'),
     config = require('./config'),
@@ -45,7 +46,7 @@ app.use(morgan('common'));
 app.use(cors());
 app.use(express.json());
 app.use('/movies', movieRouter);
-app.use('users', userRouter);
+app.use('/users', userRouter);
 
 const passport = require('passport');
 
