@@ -1,9 +1,4 @@
 //endpoint logic for existing users to login
-var express = require('express');
-var cors = require('cors');
-var app = express()
-
-app.use(cors());
 
 const jwtSecret = process.env.JWT_SECRET; //This has to be the same key in passport.js JWTStrategy
 
@@ -22,7 +17,7 @@ let generateJWTToken = (user) => {
 
 // POST login
 module.exports = (router) => {
-    router.post('/login', cors(), (req, res) => {
+    router.post('/login', (req, res) => {
         passport.authenticate('local', { session: false }, (error, user, info) => {
             if (error || !user) {
                 return res.status(400).json({
