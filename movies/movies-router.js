@@ -5,7 +5,7 @@ const Movies = Models.Movie;
 const passport = require('passport');
 
 MovieRouter //all endpoints have /movies implied as they are within the movies-router
-.get('/', (req, res) => {
+.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.find()
         .then((movies) => {
             res.status(201).json(movies);
