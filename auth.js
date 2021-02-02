@@ -1,4 +1,9 @@
 //endpoint logic for existing users to login
+const express = require('express');
+const cors = require('cors');
+const app = express();
+
+app.use(cors());
 
 const jwtSecret = process.env.JWT_SECRET; //This has to be the same key in passport.js JWTStrategy
 
