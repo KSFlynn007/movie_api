@@ -1,34 +1,3 @@
-// // ORIGINAL VERSION (to new edit version note)
-
-// require('dotenv').config();
-
-// const express = require('express'),
-//     morgan = require('morgan'),
-//     //cross origin resource sharing - enables other work to reference this backend, including my API
-//     cors = require('cors'),
-//     bodyParser = require('body-parser'),
-//     uuid = require('uuid'),
-//     mongoose = require('mongoose'),
-//     Models = require('./models.js'),
-//     Users = Models.User,
-//     Movies = Models.Movie,
-//     config = require('./config');
-    
-// const app = express();
-// const { check, validationResult } = require('express-validator');
- 
-// //logs all requests using Morgan, prints in t,erminal.
-// app.use(morgan('common'));
-// app.use(cors());
-// app.use(bodyParser.json());
-
-// //authorization JWT linking:
-// let auth = require('./auth')(app); //app argument ensures that Express is available to auth.js file too
-// const passport = require('passport');
-// require('./passport'); //why is this format different, has an error?
-
-//EDIT VERSION BELOW
-
 require('dotenv').config();
 
 const express = require('express'),
