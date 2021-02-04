@@ -54,10 +54,10 @@ const auth = require('./auth')(app);
 
 
 //connects to existing MongoDB database LOCAL
-mongoose.connect(process.env.LOCAL_DB, { useNewUrlParser: true, useUnifiedTopology: true});
+// mongoose.connect(process.env.LOCAL_DB, { useNewUrlParser: true, useUnifiedTopology: true});
 
 // connects to MongoDB Atlas database
-// mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true});
 
 //homepage
 app.get('/', (req, res) => {
