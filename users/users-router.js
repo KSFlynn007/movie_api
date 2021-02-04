@@ -15,9 +15,10 @@ UsersRouter //all endpoints have /user implied initially
         check('Email', 'Email does not appear to be valid').isEmail()
     ],
      (req, res) => {
-
     //check validation object for errors
     let errors = validationResult(req);
+
+    console.log(req.body, errors);
 
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array()});

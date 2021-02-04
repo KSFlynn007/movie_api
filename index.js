@@ -39,24 +39,25 @@ const express = require('express'),
     config = require('./config'),
     movieRouter = require('./movies/movies-router'),
     userRouter = require('./users/users-router'),
-    app = express(),
-    auth = require('./auth')(app)
+    app = express();
+
+const passport = require('passport');
 
 app.use(morgan('common'));
 app.use(cors());
 app.use(express.json());
+require('./passport');
 app.use('/movies', movieRouter);
 app.use('/users', userRouter);
 
-const passport = require('passport');
+const auth = require('./auth')(app);
 
-require('./passport');
 
 //connects to existing MongoDB database LOCAL
-// mongoose.connect(process.env.LOCAL_DB, { useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(process.env.LOCAL_DB, { useNewUrlParser: true, useUnifiedTopology: true});
 
 // connects to MongoDB Atlas database
-mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true});
+// mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true});
 
 //homepage
 app.get('/', (req, res) => {
