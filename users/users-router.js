@@ -89,6 +89,7 @@ UsersRouter //all endpoints have /user implied initially
     }
 
     let hashedPassword = Users.hashPassword(req.body.Password);
+    // needs hashPassword in all instances or else update will only take what you typed in
     Users.findOneAndUpdate({ Username: req.params.Username}, { $set:
         {
             Username: req.body.Username,
