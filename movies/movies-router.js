@@ -8,7 +8,7 @@ MovieRouter //all endpoints have /movies implied as they are within the movies-r
 .get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.find()
         .then((movies) => {
-            console.log(typeof(movies.Director.Birthday))
+            // console.log(typeof(movies.Director.Birthday))
             res.status(201).json(movies);
         })
         .catch((err) => {
