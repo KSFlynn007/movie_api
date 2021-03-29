@@ -1,10 +1,15 @@
 # movie_api
 
-myFlixDB server-side web application
+myFlixDB server-side web application, built with PostgreSQL 13, managed on MongoDB Atlas, and hosted on Heroku.
 
-## dependencies
-To interact, download all files, download all required packages with npm
+## Dependencies
 View package.json/package-lock.json for all dependant packages
 
-## Endpoints
-Check out documentation.html file to see all endpoints, expected data inputs, etc.
+## Documentation 
+Check out [documentation.html](https://m-y-f-l-i-x.herokuapp.com/documentation.html) to see all endpoints, expected data inputs, etc.
+
+## Scripts
+### 'node index.js'
+To start project
+
+
