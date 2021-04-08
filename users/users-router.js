@@ -5,8 +5,13 @@ const Users = Models.User;
 const passport = require('passport');
 const { check, validationResult } = require('express-validator');
 
-UsersRouter //all endpoints have /user implied initially
-//allow new users to register, no authorization here, because anonymous users need to register for the first time!
+/**
+ * All endpoints now have /user implied initally, using a router.js file
+ */
+UsersRouter 
+/**
+ * allow new users to register, no authorization here, as new users need to register for the first time
+ */
 .post('/', 
     [
         check('Username', 'Username is required').isLength({min:5}),
@@ -14,6 +19,12 @@ UsersRouter //all endpoints have /user implied initially
         check('Password', 'Password is not required').not().isEmpty(),
         check('Email', 'Email does not appear to be valid').isEmail()
     ],
+    /**
+     * 
+     * @param {*} req 
+     * @param {*} res 
+     * @returns response status for no errors (422)
+     */
      (req, res) => {
     //check validation object for errors
     let errors = validationResult(req);
@@ -25,6 +36,9 @@ UsersRouter //all endpoints have /user implied initially
     }
 
     let hashedPassword = Users.hashPassword(req.body.Password);
+    /**
+     * @returns response status 400 if username already exists
+     */
     Users.findOne({ Username: req.body.Username})
         .then((user) => {
             if (user) {
@@ -39,6 +53,9 @@ UsersRouter //all endpoints have /user implied initially
                     })
                     .then((user) => {res.status(201).json(user) })
                 .catch((error) => {
+                    /**
+                     * @returns response status 500 if error in creating new user
+                     */
                     console.error(error);
                     res.status(500).send('Error: ' + error);
                 })
@@ -49,20 +66,33 @@ UsersRouter //all endpoints have /user implied initially
             res.status(500).send('Error: ' + error);
         });
 })
-//get all users
+/**
+ * get all users:
+ */
 .get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.find()
         .then((users) => {
+            /**
+             * @returns response status 201 for good process
+             */
             res.status(201).json(users);
         })
         .catch((err) => {
+            /**
+             * @returns response status 500 for error in authentication
+             */
             console.error(err);
             res.status(500).send('Error: ' + err);
         });
 })
-//get a user by Username
+/**
+ * get a user by Username:
+ */
 .get('/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOne({ Username: req.params.Username })
+    /**
+     * @returns either user or response status 500 for error
+     */
         .then((user) => {
             res.json(user);
         })
@@ -71,7 +101,9 @@ UsersRouter //all endpoints have /user implied initially
             res.status(500).send('Error: ' + err);
         });
 })
-//allow users to update their user info(username)
+/**
+ * allow users to update their user infor(username)
+ */
 .put('/:Username', 
 [
     check('Username', 'Username is required.').isLength({min:5}),
@@ -80,6 +112,9 @@ UsersRouter //all endpoints have /user implied initially
     check('Email', 'Email does not appear to be valid.').isEmail()
 ],
  passport.authenticate('jwt', { session: false }), (req, res) => {
+     /**
+      * @returns either validation errors or if no errors, response status 422
+      */
     
     //checks validation code above for errors
     let errors = validationResult(req);
@@ -89,7 +124,9 @@ UsersRouter //all endpoints have /user implied initially
     }
 
     let hashedPassword = Users.hashPassword(req.body.Password);
-    // needs hashPassword in all instances or else update will only take what you typed in
+    /**
+     * needs hashPasswor in all instances or else update will only take what user typed in:
+     */
     Users.findOneAndUpdate({ Username: req.params.Username}, { $set:
         {
             Username: req.body.Username,
@@ -108,13 +145,18 @@ UsersRouter //all endpoints have /user implied initially
         }
     });
 })
-//allow users to add a movie to their favorite list - EXACT SAME CODE AS REMOVE MOVIE, EXCEPT NEEDS $PULL OPERATOR!
+/**
+ * allows users to add a movie to their favorite list
+ */
 .post('/:Username/FavoriteMovies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndUpdate({ Username: req.params.Username }, {
         $push: { FavoriteMovies: req.params.MovieID }
     },
     { new: true },
     (err, updatedUser) => {
+        /**
+         * @returns response status 500 for error, or else updatedUser
+         */
         if(err) {
             console.error(err);
             res.status(500).send('Error: ' + error);
@@ -123,13 +165,18 @@ UsersRouter //all endpoints have /user implied initially
         }   
     });
 })
-//allow users to remove a movie from their favorite list
+/**
+ * allow users to remove a movie from their favorites list:
+ */
 .delete('/:Username/FavoriteMovies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndUpdate({ Username: req.params.Username }, {
         $pull: { FavoriteMovies: req.params.MovieID }
     },
     { new: true },
     (err, updatedUser) => {
+        /**
+         * @returns response status 500 for error, or else updateUser
+         */
         if(err) {
             console.error(err);
             res.status(500).send('Error: ' + error);
@@ -138,10 +185,16 @@ UsersRouter //all endpoints have /user implied initially
         }
     });
 })
-//allow users to deregister
+/**
+ * allow users to deregister
+ */
 .delete('/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndRemove({ Username: req.params.Username })
     .then((user) => {
+        /**
+         * @returns either response status 400 for username not found, or response status 200 for confirmation of 
+         * deleted user
+         */
         if(!user) {
             res.status(400).send(req.params.Username + ' was not found.');
         } else {

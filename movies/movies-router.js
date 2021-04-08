@@ -4,9 +4,15 @@ const Models = require ('../models.js');
 const Movies = Models.Movie;
 const passport = require('passport');
 
-MovieRouter //all endpoints have /movies implied as they are within the movies-router
+/**
+ * all endpoints have /movies implied as they are within the movies-router
+ */
+MovieRouter 
 .get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.find()
+    /**
+     * @returns either status 201 for GET movies or 500 for error
+     */
         .then((movies) => {
             res.status(201).json(movies);
         })
@@ -15,9 +21,14 @@ MovieRouter //all endpoints have /movies implied as they are within the movies-r
             res.status(500).send('Error: ' + err);
         });
 })
-//get data about single movie by title
+/**
+ * get data about a single movie by title:
+ */
 .get('/:Title', (req, res) => {
     Movies.findOne({ Title: req.params.Title })
+    /**
+     * @returns either movie info by title or status 500 error
+     */
         .then((movie) => {
             res.json(movie);
         })
@@ -26,11 +37,14 @@ MovieRouter //all endpoints have /movies implied as they are within the movies-r
             res.status(500).send('Error: ' + err);
         });
 })
-//get data about genre by title "thriller"
+/**
+ * get data about genre by title
+ */
 .get('/genres/:Name', (req, res) => {
-// This is how it is searched by - by name of GENRE, not name of MOVIE
     Movies.findOne({ 'Genre.Name': req.params.Name })
-// This is what is returned in JSON format, I only need Genre Name + Genre Description, not entire movie details
+    /**
+     * @returns either status 201 for movie-specific genre info or error
+     */
     .then((movie) => {
         res.status(201).json(movie.Genre.Name + ": " + movie.Genre.Description);
     })
@@ -39,9 +53,14 @@ MovieRouter //all endpoints have /movies implied as they are within the movies-r
         res.status(500).send('Error: ' + err);
     });
 })
-//get data about a director, same format as above by searching in nested content?
+/**
+ * get datra about director by name
+ */
 .get('/directors/:Name', (req, res) => {
     Movies.findOne({ 'Director.Name': req.params.Name })
+    /**
+     * @returns either status 201 for director info or error
+     */
     .then((movie) => {
         res.status(201).json(movie.Director.Name + ': ' + movie.Director.Bio);
     })
